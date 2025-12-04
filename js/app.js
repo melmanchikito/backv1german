@@ -160,7 +160,6 @@ const eventoFormulario = () => {
   if (formulario) {
     formulario.addEventListener("submit", async (e) => {
       e.preventDefault();
-      
 
       // Recopilar datos del formulario
       const datos = {
@@ -176,7 +175,11 @@ const eventoFormulario = () => {
 
       console.log("Datos de la reserva:", datos);
 
-
+      if (errores.length > 0) {
+        alert("Corrige los siguientes errores:\n\n" + errores.join("\n"));
+        errores = [];
+        return;
+      }
       alert(
         `¡Gracias ${datos.nombre}! Tu reserva para ${datos.personas} persona(s) el ${datos.fecha} a las ${datos.hora} ha sido registrada. Te contactaremos pronto.`
       );
