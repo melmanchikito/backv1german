@@ -1,11 +1,12 @@
+// Selectores globales
 const menu = document.querySelector(".icono-menu");
 const navegacion = document.querySelector(".navegacion");
-const filtroToggle = document.querySelector(".filtro-toggle");
-const contenedorBotones = document.querySelector(".botones-platillos");
 
+// Inicialización única
 document.addEventListener("DOMContentLoaded", () => {
   eventos();
   eventosMenu();
+  toggleFiltrosCategorias();
   eventoFormulario();
 });
 
@@ -17,6 +18,8 @@ const abrirMenu = () => {
   navegacion.classList.remove("ocultar");
   botonCerrar();
 };
+
+// Toggle de filtros de categorías
 const toggleFiltrosCategorias = () => {
   const btnToggle = document.querySelector(".filtro-toggle");
   const contenedor = document.querySelector(".botones-platillos");
@@ -27,35 +30,20 @@ const toggleFiltrosCategorias = () => {
     contenedor.classList.toggle("ocultar");
   });
 };
+
 const botonCerrar = () => {
   const botonCerrar = document.createElement("p");
   const overlay = document.createElement("div");
   overlay.classList.add("filtro");
   const body = document.querySelector("body");
+  
   if (document.querySelectorAll(".filtro").length > 0) return;
+  
   body.appendChild(overlay);
   botonCerrar.textContent = "X";
   botonCerrar.classList.add("btn-cerrar");
   navegacion.appendChild(botonCerrar);
   cerrarMenu(botonCerrar, overlay);
-};
-
-document.addEventListener("DOMContentLoaded", () => {
-  eventos();
-  eventosMenu();
-  eventoFormulario();
-  toggleFiltrosCategorias(); // 👈 nuevo
-});
-
-const eventosFiltros = () => {
-  const filtroToggle = document.querySelector(".filtro-toggle");
-  const contenedorBotones = document.querySelector(".botones-platillos");
-
-  if (!filtroToggle || !contenedorBotones) return;
-
-  filtroToggle.addEventListener("click", () => {
-    contenedorBotones.classList.toggle("ocultar");
-  });
 };
 
 
@@ -72,37 +60,42 @@ const cerrarMenu = (boton, overlay) => {
   };
 };
 
-// Funcionalidad de filtrado de platillos
+// Funcionalidad de filtrado de platillos (optimizada)
 const eventosMenu = () => {
   const botones = document.querySelectorAll(".botones-platillos button");
   const platillos = document.querySelectorAll(".platillo");
+
+  // Mapa de categorías para simplificar la lógica
+  const categoriaMap = {
+    'todos': () => true,
+    'ensaladas': (tipo) => tipo === 'ensalada',
+    'pasta': (tipo) => tipo === 'pasta',
+    'pizza': (tipo) => tipo === 'pizza',
+    'postres': (tipo) => tipo === 'postre'
+  };
 
   botones.forEach((boton) => {
     boton.addEventListener("click", () => {
       // Remover clase activo de todos los botones
       botones.forEach((btn) => btn.classList.remove("activo"));
+      
       // Agregar clase activo al botón clickeado
       boton.classList.add("activo");
 
-      const categoria = boton.classList[0]; // Primera clase es la categoría
+      const categoria = boton.classList[0];
+      const filtro = categoriaMap[categoria];
 
-      platillos.forEach((platillo) => {
-        const tipoPlatillo = platillo.dataset.platillo;
-
-        if (categoria === "todos") {
-          platillo.classList.remove("ocultar");
-        } else if (categoria === "ensaladas" && tipoPlatillo === "ensalada") {
-          platillo.classList.remove("ocultar");
-        } else if (categoria === "pasta" && tipoPlatillo === "pasta") {
-          platillo.classList.remove("ocultar");
-        } else if (categoria === "pizza" && tipoPlatillo === "pizza") {
-          platillo.classList.remove("ocultar");
-        } else if (categoria === "postres" && tipoPlatillo === "postre") {
-          platillo.classList.remove("ocultar");
-        } else {
-          platillo.classList.add("ocultar");
-        }
-      });
+      if (filtro) {
+        platillos.forEach((platillo) => {
+          const tipoPlatillo = platillo.dataset.platillo;
+          
+          if (filtro(tipoPlatillo)) {
+            platillo.classList.remove("ocultar");
+          } else {
+            platillo.classList.add("ocultar");
+          }
+        });
+      }
     });
   });
 
