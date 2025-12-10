@@ -531,6 +531,75 @@ video {
   margin-bottom: 5rem;
 }
 
+@media (min-width: 768px) {
+  .btn {
+    font-size: 2.2rem;
+  }
+  
+  .bordes {
+    border: 4px solid var(--blanco);
+  }
+  
+  .texto-encabezado h2.titulo-hero {
+    font-size: 6rem;
+  }
+  
+  .contenedor-nosotros {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .texto-nosotros .bienvenido,
+  .texto-nosotros h1,
+  .texto-nosotros p {
+    text-align: left;
+  }
+  
+  .navegacion {
+    position: static;
+    height: auto;
+    width: auto;
+    padding: 0;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: none;
+  }
+  
+  .navegacion a {
+    font-size: 1.6rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    text-align: center;
+  }
+  
+  .navegacion a:hover {
+    background: linear-gradient(135deg, var(--verde));
+    color: var(--blanco);
+    border-color: transparent;
+    transform: translateY(-1px);
+  }
+  
+  .icono-menu {
+    display: none;
+  }
+
+  .platillos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .contenido-reservas {
+    grid-template-columns: 1fr 1.2fr;
+  }
+  .campo-grupo {
+    grid-template-columns: 1fr 1fr;
+  }
+  .contenido-footer {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
 @media (min-width: 1024px) {
   .platillos {
     grid-template-columns: repeat(3, 1fr); /* pc: 3 por fila */
@@ -816,39 +885,6 @@ video {
   color: #888;
 }
 
-
-@media (min-width: 768px) {
-  .navegacion {
-    position: static;
-    height: auto;
-    width: auto;
-    padding: 0;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    animation: none;
-  }
-
-  .navegacion a {
-    font-size: 1.6rem;
-    padding: 0.8rem 1.8rem;
-    border-radius: var(--radius-pill);
-    border: 1px solid transparent;
-    text-align: center;
-  }
-
-  .navegacion a:hover {
-    background: linear-gradient(135deg, var(--verde));
-    color: var(--blanco);
-    border-color: transparent;
-    transform: translateY(-1px);
-  }
-
-  .icono-menu {
-    display: none;
-  }
-}
 
 /* =========================
    SECCIÓN DE CHEFS
