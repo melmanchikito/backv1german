@@ -924,11 +924,12 @@ video {
 
 /* GRID DE 5 CARDS */
 .contenedor-chefs {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 3rem;
 }
+
 
 
 
@@ -941,7 +942,7 @@ video {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   transition: var(--transition-smooth);
   padding-bottom: 2rem;
-   width: 300px;
+  width: 300px;
 }
 
 .card-chef:hover {
