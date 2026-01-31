@@ -246,21 +246,21 @@ img {
   transition: text-shadow 0.3s ease, transform 0.3s ease;
 }
 /* Verde brillante */
-.navegacion a:nth-child(1),
+/* .navegacion a:nth-child(1),
 .navegacion a:nth-child(4) {
   text-shadow: 0 0 12px rgba(0,255,0,0.5);
 }
 
 /* Blanco brillante */
-.navegacion a:nth-child(2),
+/* .navegacion a:nth-child(2),
 .navegacion a:nth-child(5) {
   text-shadow: 0 0 12px rgba(255,255,255,0.6);
-}
+} */
 
-/* Rojo brillante */
+/* Rojo brillante
 .navegacion a:nth-child(3) {
   text-shadow: 0 0 12px rgba(255,0,0,0.6);
-}
+}  */
 .navegacion a:hover {
   transform: translateY(-3px);
   text-shadow: 0 0 20px rgba(255,255,255,1);
