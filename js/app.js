@@ -52,8 +52,9 @@ const validaciones = () => {
     }
 
     const personas = document.getElementById("personas").value;
-    if (personas === "") {
-      errores.push("Selecciona el número de personas.");
+    const personasNum = parseInt(personas);
+    if (personas === "" || isNaN(personasNum) || personasNum < 1 || personasNum > 20) {
+      errores.push("El número de personas debe ser entre 1 y 20.");
     }
   });
 };
@@ -153,7 +154,7 @@ const eventosMenu = () => {
   }
 };
 
-// Funcionalidad del formulario de reservas (preparado para fetch)
+// Funcionalidad del formulario de reservas con envío a PHP
 const eventoFormulario = () => {
   const formulario = document.querySelector("#formReservas");
 
@@ -161,29 +162,49 @@ const eventoFormulario = () => {
     formulario.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // Recopilar datos del formulario
-      const datos = {
-        nombre: document.querySelector("#nombre").value,
-        email: document.querySelector("#email").value,
-        telefono: document.querySelector("#telefono").value,
-        fecha: document.querySelector("#fecha").value,
-        hora: document.querySelector("#hora").value,
-        personas: document.querySelector("#personas").value,
-        ocasion: document.querySelector("#ocasion").value,
-        comentarios: document.querySelector("#comentarios").value,
-      };
-
-      console.log("Datos de la reserva:", datos);
-
+      // Si hay errores de validación, detener
       if (errores.length > 0) {
         alert("Corrige los siguientes errores:\n\n" + errores.join("\n"));
         errores = [];
         return;
       }
-      alert(
-        `¡Gracias ${datos.nombre}! Tu reserva para ${datos.personas} persona(s) el ${datos.fecha} a las ${datos.hora} ha sido registrada. Te contactaremos pronto.`
-      );
-      formulario.reset();
+
+      // Recopilar datos del formulario
+      const formData = new FormData(formulario);
+      
+      // Deshabilitar botón de envío
+      const btnSubmit = formulario.querySelector('button[type="submit"]');
+      const textoOriginal = btnSubmit.textContent;
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Enviando...';
+
+      try {
+        // Enviar datos al servidor
+        const response = await fetch('reservas.php?accion=crear', {
+          method: 'POST',
+          body: formData
+        });
+
+        const resultado = await response.json();
+
+        if (resultado.success) {
+          alert(
+            `¡Gracias por tu reserva!\n\n` +
+            `Tu código de reserva es: ${resultado.codigo}\n\n` +
+            `Te contactaremos pronto para confirmar tu reserva.`
+          );
+          formulario.reset();
+        } else {
+          alert('Error al crear la reserva:\n' + resultado.message);
+        }
+      } catch (error) {
+        alert('Error al procesar la reserva:\n' + error.message);
+        console.error('Error:', error);
+      } finally {
+        // Rehabilitar botón
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = textoOriginal;
+      }
     });
   }
 };

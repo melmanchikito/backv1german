@@ -52,7 +52,7 @@
           <a href="#menu" class="btn bordes">Il nostro menú</a>
         </div>
         <video autoplay loop muted>
-          <source src="/assets/bg_video.mp4">
+          <source src="assets/bg_video.mp4">
         </video>
       </div>
     </div>
@@ -239,15 +239,7 @@
         <div class="campo-grupo">
           <div class="campo">
             <label for="personas">Personas</label>
-            <select id="personas" name="personas" required>
-              <option value="">Seleccionar</option>
-              <option value="1">1 persona</option>
-              <option value="2">2 personas</option>
-              <option value="3">3 personas</option>
-              <option value="4">4 personas</option>
-              <option value="5">5 personas</option>
-              <option value="6+">6+ personas</option>
-            </select>
+            <input type="number" id="personas" name="personas" min="1" max="20" placeholder="Ej: 4" required>
           </div>
           <div class="campo">
             <label for="ocasion">Ocasión</label>

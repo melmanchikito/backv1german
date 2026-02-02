@@ -1,0 +1,596 @@
+/* Estilos para el panel de administración de reservas */
+
+/* Utilidades */
+.ocultar {
+  display: none !important;
+}
+
+/* Header Admin */
+.admin-header {
+  background: linear-gradient(135deg, var(--oscuro) 0%, #1a1a1a 100%);
+  padding: 2rem 0;
+  box-shadow: var(--shadow-md);
+}
+
+.admin-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-nav .logo h2 {
+  color: var(--blanco);
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+.admin-links a {
+  color: var(--blanco);
+  text-decoration: none;
+  font-size: 1.6rem;
+  padding: 1rem 2rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--verde);
+  transition: var(--transition-base);
+  font-weight: 600;
+}
+
+.admin-links a:hover {
+  background-color: #008a3d;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-verde);
+}
+
+/* Main Content */
+.admin-main {
+  min-height: calc(100vh - 200px);
+  padding: 4rem 0;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+}
+
+.admin-titulo {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.admin-titulo h1 {
+  font-size: 4rem;
+  color: var(--oscuro);
+  margin-bottom: 1rem;
+  font-family: var(--titulos);
+}
+
+.subtitulo {
+  font-size: 1.8rem;
+  color: #666;
+  font-family: var(--parrafos);
+}
+
+/* Filtros */
+.filtros-reservas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.filtro-grupo {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-filtro {
+  padding: 1rem 2.5rem;
+  border: 2px solid var(--verde);
+  background-color: transparent;
+  color: var(--verde);
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-family: var(--parrafos);
+  font-weight: 600;
+}
+
+.btn-filtro:hover {
+  background-color: var(--verde);
+  color: var(--blanco);
+}
+
+.btn-filtro.activo {
+  background-color: var(--verde);
+  color: var(--blanco);
+  box-shadow: var(--shadow-verde);
+}
+
+.busqueda-reservas {
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.busqueda-reservas input {
+  width: 100%;
+  padding: 1.2rem 2rem;
+  border: 2px solid #ddd;
+  border-radius: var(--radius-pill);
+  font-size: 1.5rem;
+  font-family: var(--parrafos);
+  transition: var(--transition-base);
+}
+
+.busqueda-reservas input:focus {
+  outline: none;
+  border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgba(0, 161, 73, 0.1);
+}
+
+/* Tabla */
+.tabla-container {
+  background: var(--blanco);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  margin-bottom: 4rem;
+}
+
+.tabla-reservas {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--parrafos);
+}
+
+.tabla-reservas thead {
+  background: linear-gradient(135deg, var(--oscuro) 0%, #2a2a2a 100%);
+}
+
+.tabla-reservas thead th {
+  padding: 1.5rem 1rem;
+  text-align: left;
+  color: var(--blanco);
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+.tabla-reservas tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: var(--transition-base);
+}
+
+.tabla-reservas tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.tabla-reservas tbody td {
+  padding: 1.5rem 1rem;
+  font-size: 1.4rem;
+  color: #333;
+  vertical-align: middle;
+}
+
+/* Badge de estado */
+.badge-estado {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-pill);
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+.badge-pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffc107;
+}
+
+.badge-confirmada {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #28a745;
+}
+
+.badge-cancelada {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #dc3545;
+}
+
+/* Botones de acción */
+.acciones-reserva {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-accion {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: var(--transition-base);
+  font-family: var(--parrafos);
+  font-weight: 600;
+}
+
+.btn-confirmar {
+  background-color: #28a745;
+  color: var(--blanco);
+}
+
+.btn-confirmar:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-cancelar {
+  background-color: #dc3545;
+  color: var(--blanco);
+}
+
+.btn-cancelar:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-ver {
+  background-color: #007bff;
+  color: var(--blanco);
+}
+
+.btn-ver:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Mensajes */
+.mensaje-loading,
+.mensaje-error,
+.mensaje-vacio {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.8rem;
+  font-family: var(--parrafos);
+}
+
+.mensaje-loading {
+  color: var(--verde);
+  font-weight: 600;
+}
+
+.mensaje-error {
+  color: var(--rojo);
+  background-color: #f8d7da;
+  border-radius: var(--radius-card);
+  margin: 2rem;
+}
+
+.mensaje-vacio {
+  color: #666;
+  font-style: italic;
+}
+
+/* Estadísticas */
+.estadisticas-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.stat-card {
+  background: var(--blanco);
+  padding: 3rem 2rem;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  border-left: 5px solid var(--oscuro);
+  transition: var(--transition-base);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-card.verde {
+  border-left-color: #ffc107;
+}
+
+.stat-card.confirmada {
+  border-left-color: #28a745;
+}
+
+.stat-card.cancelada {
+  border-left-color: #dc3545;
+}
+
+.stat-numero {
+  display: block;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--oscuro);
+  font-family: var(--titulos);
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  display: block;
+  font-size: 1.6rem;
+  color: #666;
+  font-family: var(--parrafos);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+/* Footer */
+.admin-footer {
+  background-color: var(--oscuro);
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--blanco);
+  margin-top: 4rem;
+}
+
+.admin-footer p {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-contenido {
+  background: var(--blanco);
+  padding: 3rem;
+  border-radius: var(--radius-card);
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-cerrar-modal {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  font-size: 3rem;
+  cursor: pointer;
+  color: #666;
+  transition: var(--transition-base);
+  z-index: 10;
+  user-select: none;
+  line-height: 1;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+}
+
+.btn-cerrar-modal:hover {
+  color: var(--rojo);
+  transform: scale(1.1);
+}
+
+.modal-contenido h3 {
+  font-family: var(--titulos);
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+  color: var(--oscuro);
+}
+
+.modal-contenido p {
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Modal de edición más grande */
+.modal-contenido-grande {
+  background: var(--blanco);
+  padding: 3rem;
+  border-radius: var(--radius-card);
+  max-width: 800px;
+  width: 90%;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Formulario de edición */
+.form-editar {
+  margin-top: 2rem;
+}
+
+.form-editar .campo,
+.form-editar .campo-readonly {
+  margin-bottom: 2rem;
+}
+
+.form-editar label {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.form-editar input,
+.form-editar select,
+.form-editar textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-family: var(--parrafos);
+  transition: var(--transition-base);
+}
+
+.form-editar input:focus,
+.form-editar select:focus,
+.form-editar textarea:focus {
+  outline: none;
+  border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgba(0, 161, 73, 0.1);
+}
+
+.form-editar input[readonly] {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  color: #666;
+}
+
+.campo-grupo {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.campo-readonly {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.campo-readonly label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+.campo-readonly input {
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--verde);
+  padding: 0;
+}
+
+/* Botones del modal */
+.botones-modal {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: flex-end;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #eee;
+}
+
+.btn-cancelar-modal {
+  background: #6c757d;
+  color: white;
+  padding: 1.2rem 3rem;
+  font-size: 1.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancelar-modal:hover {
+  background: #5a6268;
+}
+
+.btn-guardar-modal {
+  background: var(--verde);
+  color: white;
+  padding: 1.2rem 3rem;
+  font-size: 1.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-guardar-modal:hover {
+  background: #008a3d;
+}
+
+/* Botón de eliminar en la tabla */
+.btn-eliminar {
+  background: transparent;
+  border: none;
+  color: var(--rojo);
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: var(--transition-base);
+  font-weight: bold;
+}
+
+.btn-eliminar:hover {
+  transform: scale(1.3);
+  color: #c82333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-nav {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .filtros-reservas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .busqueda-reservas {
+    max-width: 100%;
+  }
+
+  .tabla-container {
+    overflow-x: auto;
+  }
+
+  .tabla-reservas {
+    min-width: 1400px;
+  }
+
+  .admin-titulo h1 {
+    font-size: 3rem;
+  }
+
+  .estadisticas-resumen {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .campo-grupo {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-contenido-grande {
+    width: 95%;
+    padding: 2rem;
+  }
+
+  .botones-modal {
+    flex-direction: column;
+  }
+
+  .botones-modal button {
+    width: 100%;
+  }
+}
