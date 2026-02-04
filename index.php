@@ -2,18 +2,47 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+// =======================
+// CORS CORRECTO
+// =======================
 
+$allowedOrigins = [
+  "https://ristoranteitalgm.netlify.app"
+];
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($origin, $allowedOrigins)) {
+  header("Access-Control-Allow-Origin: $origin");
+}
+
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json; charset=utf-8");
+
+// Preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
   http_response_code(200);
   exit;
 }
 
+// =======================
+// SESIÓN
+// =======================
+
+session_start();
+
+// =======================
+// CONEXIÓN
+// =======================
+
 require_once __DIR__ . '/Models/Conexion.php';
 $conexion = Conexion::conectar();
+
+// =======================
+// ROUTER
+// =======================
 
 $controller = $_GET['controller'] ?? null;
 $action     = $_GET['action'] ?? null;
@@ -57,11 +86,7 @@ try {
 
       "auth_login" => [
         "method" => "POST",
-        "url" => "?controller=auth&action=autenticar",
-        "body" => [
-          "usuario" => "string",
-          "password" => "string"
-        ]
+        "url" => "?controller=auth&action=autenticar"
       ],
 
       "reservas_listar" => [
@@ -75,12 +100,12 @@ try {
       ],
 
       "reservas_actualizar" => [
-        "method" => "PUT",
+        "method" => "POST",
         "url" => "?controller=reserva&action=actualizar"
       ],
 
       "reservas_eliminar" => [
-        "method" => "DELETE",
+        "method" => "POST",
         "url" => "?controller=reserva&action=eliminar"
       ]
     ]
