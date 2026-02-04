@@ -11,35 +11,35 @@ switch ($accion) {
     case 'crear':
         $controller->crear();
         break;
-        
+
     case 'listar':
         $controller->listar();
         break;
-        
+
     case 'listar-por-estado':
         $controller->listarPorEstado();
         break;
-        
+
     case 'obtener':
         $controller->obtenerPorId();
         break;
-        
+
     case 'actualizar-estado':
         $controller->actualizarEstado();
         break;
-        
+
     case 'actualizar':
         $controller->actualizar();
         break;
-        
+
     case 'eliminar':
         $controller->eliminar();
         break;
-        
+
     case 'estadisticas':
         $controller->estadisticas();
         break;
-        
+
     default:
         header('Content-Type: application/json');
         echo json_encode([
@@ -58,4 +58,3 @@ switch ($accion) {
         ]);
         break;
 }
-?>

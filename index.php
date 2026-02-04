@@ -1,3 +1,39 @@
+<?php
+
+define('BASE_URL', '/Proyecto-Restaurante-Italiano/');
+ini_set('display_errors', 1);
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+session_start();
+
+require_once 'Models/Conexion.php';
+
+$controller = $_GET['controller'] ?? null;
+$action     = $_GET['action'] ?? null;
+
+
+
+switch ($controller) {
+
+  case 'auth':
+    require_once 'Controllers/AuthController.php';
+    $auth = new AuthController($conexion);
+    $auth->$action();
+    exit;
+
+  case 'reserva':
+    require_once 'Controllers/ReservaController.php';
+    $reserva = new ReservaController();
+    $reserva->$action();
+    exit;
+}
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -15,10 +51,15 @@
     rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/normalize.css" />
-  <link rel="stylesheet" href="css/styles.css" />
-</head>
 
+  <link rel="stylesheet" href="/Proyecto-Restaurante-Italiano/css/styles.css">
+  <link rel="stylesheet" href="/Proyecto-Restaurante-Italiano/css/normalize.css">
+
+  <script src="/Proyecto-Restaurante-Italiano/js/app.js" defer></script>
+
+
+
+</head>
 
 <body>
   <header class="encabezado">
@@ -37,6 +78,7 @@
 
           <a href="#chefs">Chef</a>
           <a href="#contacto">Contacto</a>
+          <a href="index.php?controller=auth&action=login">Login</a>
 
         </nav>
         <div class="icono-menu"><span></span><span></span><span></span></div>
@@ -333,7 +375,7 @@
     </div>
   </footer>
 
-  <script src="js/app.js"></script>
+
 </body>
 
 </html>

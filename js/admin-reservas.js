@@ -288,27 +288,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Función para actualizar reserva
     async function actualizarReserva() {
-        try {
-            const formData = new FormData(formEditar);
+    try {
+        const formData = new FormData(formEditar);
 
-            const response = await fetch('../reservas.php?accion=actualizar', {
-                method: 'POST',
-                body: formData
-            });
+        const response = await fetch('../reservas.php?accion=actualizar', {
+            method: 'POST',
+            body: formData
+        });
 
-            const resultado = await response.json();
+        const resultado = await response.json();
 
-            if (resultado.success) {
-                alert('Reserva actualizada correctamente');
-                cerrarModalEditar();
-                cargarReservas();
-            } else {
-                alert('Error al actualizar: ' + resultado.message);
+        if (resultado.success) {
+            alert('Reserva actualizada correctamente');
+            cerrarModalEditar();
+            cargarReservas();
+        } else {
+            let mensaje = resultado.message ?? 'Error desconocido';
+
+            if (resultado.errors) {
+                mensaje += '\n\n';
+                for (let campo in resultado.errors) {
+                    mensaje += `- ${resultado.errors[campo]}\n`;
+                }
             }
-        } catch (error) {
-            alert('Error al actualizar la reserva: ' + error.message);
+
+            alert(mensaje);
         }
+    } catch (error) {
+        alert('Error al actualizar la reserva: ' + error.message);
     }
+}
+
 
     // Función para eliminar reserva
     window.eliminarReserva = async function(id) {

@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['usuario'])) {
+  header("Location: index.php");
+  exit;
+}
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -29,7 +41,8 @@
           </h2>
         </div>
         <nav class="admin-links">
-          <a href="../index.html">Volver al sitio</a>
+          <a href="/Proyecto-Restaurante-Italiano/index.php">Volver al sitio</a>
+
         </nav>
       </div>
     </div>
@@ -58,7 +71,7 @@
         <div id="mensajeLoading" class="mensaje-loading">
           <p>Cargando reservas...</p>
         </div>
-        
+
         <div id="mensajeError" class="mensaje-error ocultar">
           <p></p>
         </div>
@@ -132,7 +145,7 @@
       <h3>Editar Reserva</h3>
       <form id="formEditar" class="form-editar">
         <input type="hidden" id="edit-id" name="id">
-        
+
         <div class="campo-readonly">
           <label>Código de Reserva</label>
           <input type="text" id="edit-codigo" readonly>
