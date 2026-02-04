@@ -2,25 +2,36 @@
 
 /**
  * API RESTful para Ristorante Italini
- * Punto de entrada único para todas las operaciones del backend
  */
 
-// Configuración de headers CORS y JSON
-// Detectar origen permitido
-$ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// CORS abierto para Netlify + pruebas
-header("Access-Control-Allow-Origin: *");
+// ===== CORS CORRECTO =====
+
+$allowedOrigins = [
+    "https://ristoranteitalgm.netlify.app",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500"
+];
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($origin, $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: $origin");
+}
+
+header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json; charset=utf-8");
 
-// Manejar preflight
+// Preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
+
 
 
 // Iniciar sesión
