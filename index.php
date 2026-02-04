@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // =======================
-// CORS CORRECTO
+// CORS
 // =======================
 
 $allowedOrigins = [
@@ -14,9 +14,9 @@ $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 if (in_array($origin, $allowedOrigins)) {
   header("Access-Control-Allow-Origin: $origin");
+  header("Access-Control-Allow-Credentials: true");
 }
 
-header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json; charset=utf-8");
@@ -76,7 +76,7 @@ try {
   }
 
   // ======================
-  // DOCUMENTACIÓN API
+  // INFO API
   // ======================
 
   echo json_encode([
@@ -92,6 +92,11 @@ try {
       "reservas_listar" => [
         "method" => "GET",
         "url" => "?controller=reserva&action=listar"
+      ],
+
+      "reservas_obtener" => [
+        "method" => "GET",
+        "url" => "?controller=reserva&action=obtenerPorId&id=1"
       ],
 
       "reservas_crear" => [
