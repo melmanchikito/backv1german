@@ -52,8 +52,8 @@ switch ($controller) {
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
 
-  <link rel="stylesheet" href="/Proyecto-Restaurante-Italiano/css/styles.css">
-  <link rel="stylesheet" href="/Proyecto-Restaurante-Italiano/css/normalize.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/normalize.css">
 
   <script src="/Proyecto-Restaurante-Italiano/js/app.js" defer></script>
 

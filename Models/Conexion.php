@@ -2,7 +2,7 @@
 $host = "localhost";
 $bd = "ristorante";
 $user = "root";
-$pass = "12345";
+$pass = "";
 
 $conexion = new mysqli($host, $user, $pass, $bd);
 
