@@ -1,18 +1,19 @@
 <?php
 
 /**
- * API RESTful para Ristorante Italini
+ * API RESTful — Ristorante Italini
+ * Punto único de entrada backend
  */
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// ===== CORS CORRECTO =====
+/* =========================
+   CORS CONFIG — NETLIFY
+========================= */
 
 $allowedOrigins = [
-    "https://ristoranteitalgm.netlify.app",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500"
+    "https://ristoranteitalgm.netlify.app"
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -26,140 +27,166 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json; charset=utf-8");
 
-// Preflight
+/* =========================
+   PREFLIGHT
+========================= */
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
 
+/* =========================
+   SESIÓN (cross-domain)
+========================= */
 
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'None'
+]);
 
-// Iniciar sesión
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Error reporting para desarrollo
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+/* =========================
+   CARGA DE CLASES
+========================= */
 
-// Autoload de clases
 require_once __DIR__ . '/Models/Conexion.php';
 require_once __DIR__ . '/Models/Reserva.php';
 require_once __DIR__ . '/Services/ReservaService.php';
 require_once __DIR__ . '/Controllers/ReservaController.php';
 require_once __DIR__ . '/Controllers/AuthController.php';
 
-// Obtener parámetros de la URL
+/* =========================
+   PARAMS
+========================= */
+
 $controller = $_GET['controller'] ?? null;
-$accion = $_GET['accion'] ?? null;
-$action = $_GET['action'] ?? null;
+$accion     = $_GET['accion'] ?? null;
+$action     = $_GET['action'] ?? null;
+
+/* =========================
+   ROUTER
+========================= */
 
 try {
-    // Rutas de autenticación
+
+    /* ===== AUTH ===== */
+
     if ($controller === 'auth') {
-        $authController = new AuthController();
+
+        $auth = new AuthController();
 
         switch ($action) {
+
             case 'autenticar':
             case 'login':
-                $authController->autenticar();
+                $auth->autenticar();
                 break;
 
             case 'logout':
-                $authController->logout();
+                $auth->logout();
                 break;
 
             default:
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Acción de autenticación no válida'
+                    'message' => 'Acción auth inválida'
                 ]);
         }
+
         exit;
     }
 
-    // Rutas de reservas
+    /* ===== RESERVAS ===== */
+
     if ($accion) {
-        $reservaController = new ReservaController();
+
+        $reserva = new ReservaController();
 
         switch ($accion) {
+
             case 'crear':
-                $reservaController->crear();
+                $reserva->crear();
                 break;
 
             case 'listar':
-                $reservaController->listar();
+                $reserva->listar();
                 break;
 
             case 'listar-por-estado':
-                $reservaController->listarPorEstado();
+                $reserva->listarPorEstado();
                 break;
 
             case 'obtener':
-                $reservaController->obtenerPorId();
+                $reserva->obtenerPorId();
                 break;
 
             case 'actualizar-estado':
-                $reservaController->actualizarEstado();
+                $reserva->actualizarEstado();
                 break;
 
             case 'actualizar':
-                $reservaController->actualizar();
+                $reserva->actualizar();
                 break;
 
             case 'eliminar':
-                $reservaController->eliminar();
+                $reserva->eliminar();
                 break;
 
             case 'estadisticas':
-                $reservaController->estadisticas();
+                $reserva->estadisticas();
                 break;
 
             default:
                 echo json_encode([
                     'success' => false,
                     'message' => 'Acción no válida',
-                    'acciones_disponibles' => [
-                        'crear' => 'POST - Crear nueva reserva',
-                        'listar' => 'GET - Listar todas las reservas',
-                        'listar-por-estado' => 'GET - Listar reservas por estado (requiere parámetro estado)',
-                        'obtener' => 'GET - Obtener una reserva por ID (requiere parámetro id)',
-                        'actualizar-estado' => 'POST - Actualizar estado de reserva',
-                        'actualizar' => 'POST - Actualizar reserva completa',
-                        'eliminar' => 'POST - Eliminar una reserva',
-                        'estadisticas' => 'GET - Obtener estadísticas de reservas'
+                    'acciones' => [
+                        'crear',
+                        'listar',
+                        'listar-por-estado',
+                        'obtener',
+                        'actualizar-estado',
+                        'actualizar',
+                        'eliminar',
+                        'estadisticas'
                     ]
                 ]);
         }
+
         exit;
     }
 
-    // Si no hay parámetros, mostrar información de la API
+    /* ===== INFO API ===== */
+
     echo json_encode([
         'success' => true,
-        'message' => 'API de Ristorante Italini',
+        'api' => 'Ristorante Italini API',
+        'status' => 'running',
         'version' => '1.0',
+        'base_url' => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'],
         'endpoints' => [
-            'auth' => [
-                'login' => 'POST ?controller=auth&action=autenticar',
-                'logout' => 'GET ?controller=auth&action=logout'
-            ],
-            'reservas' => [
-                'crear' => 'POST ?accion=crear',
-                'listar' => 'GET ?accion=listar',
-                'listar-por-estado' => 'GET ?accion=listar-por-estado&estado={estado}',
-                'obtener' => 'GET ?accion=obtener&id={id}',
-                'actualizar-estado' => 'POST ?accion=actualizar-estado',
-                'actualizar' => 'POST ?accion=actualizar',
-                'eliminar' => 'POST ?accion=eliminar',
-                'estadisticas' => 'GET ?accion=estadisticas'
-            ]
+            'auth_login' => 'POST ?controller=auth&action=autenticar',
+            'auth_logout' => 'GET ?controller=auth&action=logout',
+            'reservas_listar' => 'GET ?accion=listar',
+            'reservas_crear' => 'POST ?accion=crear',
+            'reservas_actualizar' => 'POST ?accion=actualizar',
+            'reservas_eliminar' => 'POST ?accion=eliminar'
         ]
     ], JSON_PRETTY_PRINT);
-} catch (Exception $e) {
+} catch (Throwable $e) {
+
     http_response_code(500);
+
     echo json_encode([
         'success' => false,
-        'message' => 'Error interno del servidor',
+        'message' => 'Error interno',
         'error' => $e->getMessage()
     ]);
 }
