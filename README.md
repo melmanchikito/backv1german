@@ -1,59 +1,318 @@
-# Sistema de Reservas - Ristorante Italini
+# 🍝 Ristorante Italini - Backend API
 
-## Estructura del Proyecto (MVC)
+## 📋 Descripción
+Backend RESTful API para el sitio web de **Ristorante Italini**. Sistema desarrollado en **PHP puro** siguiendo la arquitectura **MVC (Modelo-Vista-Controlador)**, diseñado para gestionar reservas de restaurante y autenticación de usuarios.
+
+## ✨ Características
+
+- **API RESTful** completa con endpoints JSON
+- **Arquitectura MVC** limpia y organizada
+- **CRUD completo** de reservas
+- **Sistema de autenticación** con sesiones PHP
+- **Validación de datos** en servidor
+- **Generación automática** de códigos de reserva únicos
+- **Gestión de estados** de reservas (Pendiente, Confirmada, Cancelada)
+- **CORS configurado** para comunicación con frontend
+- **Base de datos MySQL** con triggers y procedimientos
+
+## 🛠️ Tecnologías Utilizadas
+
+- **PHP 7.4+** - Lenguaje del backend
+- **MySQL 5.7+** - Base de datos relacional
+- **PDO/MySQLi** - Conexión a base de datos
+- **Apache** - Servidor web
+- **htaccess** - Configuración de rutas y CORS
+
+## 📁 Estructura del Proyecto (MVC)
 
 ```
-ristorante-italini/
-│
-├── Models/                      # 🎯 ENTIDADES/MODELOS
-│   ├── Conexion.php            # Conexión a la base de datos
-│   └── Reserva.php             # Clase Reserva (atributos y validaciones)
-│
-├── Services/                    # 🔧 SERVICIOS (Lógica de negocio)
-│   └── ReservaService.php      # Lógica de acceso a datos y consultas SQL
-│
-├── Controllers/                 # 🎮 CONTROLADORES
-│   └── ReservaController.php   # Manejo de peticiones HTTP y respuestas
-│
-├── Views/                       # 👁️ VISTAS
-│   └── admin-reservas.php      # Interfaz de administración
-│
-├── css/                        # Estilos
-│   ├── normalize.css
-│   ├── styles.css
-│   └── admin-reservas.css
-│
-├── js/                         # JavaScript
-│   ├── app.js                 # JavaScript del sitio principal
-│   └── admin-reservas.js      # JavaScript del panel admin
-│
-├── assets/                     # Imágenes y recursos
-├── index.html                 # Página principal con formulario
-└── reservas.php              # 🚪 PUNTO DE ENTRADA (Enrutador)
+Proyecto-Restaurante-Italiano/
+├── api.php                    # Punto de entrada único de la API
+├── .htaccess                  # Configuración Apache y CORS
+├── database.sql               # Script de creación de BD
+├── Controllers/               # Capa de Controladores
+│   ├── AuthController.php     # Autenticación de usuarios
+│   └── ReservaController.php  # Gestión de reservas
+├── Models/                    # Capa de Modelos
+│   ├── Conexion.php           # Conexión a base de datos
+│   └── Reserva.php            # Modelo de entidad Reserva
+├── Services/                  # Capa de Servicios
+│   └── ReservaService.php     # Lógica de negocio de reservas
+└── README.md                  # Este archivo
 ```
 
-## Arquitectura en Capas
+## 🚀 Instalación y Configuración
 
-El proyecto sigue el patrón **MVC con capa de Servicios**:
+### Requisitos Previos
 
-- **Model (Reserva.php)**: Define la estructura de datos y validaciones
-- **Service (ReservaService.php)**: Contiene toda la lógica de negocio y acceso a BD
-- **Controller (ReservaController.php)**: Maneja peticiones HTTP y coordina Model/Service
-- **View**: Interfaces de usuario (HTML/JS)
+- **XAMPP** o **WAMP** (Apache + PHP + MySQL)
+  - PHP >= 7.4
+  - MySQL >= 5.7
+  - Apache 2.4
+- **Composer** (opcional, para futuras dependencias)
 
-Ver [ARQUITECTURA.md](ARQUITECTURA.md) para más detalles.
+### Pasos de Instalación
 
-## Base de Datos
+#### 1. Instalar XAMPP
 
-Asegurarse de tener creada la base de datos `ristorante` y la tabla `reservas`:
+Descarga e instala XAMPP desde: https://www.apachefriends.org/
+
+#### 2. Configurar el Proyecto
+
+```bash
+# Copia el proyecto a la carpeta htdocs de XAMPP
+# Ruta típica: C:\xampp\htdocs\
+
+# En Windows
+xcopy /E /I "Proyecto-Restaurante-Italiano" "C:\xampp\htdocs\Proyecto-Restaurante-Italiano"
+```
+
+#### 3. Configurar la Base de Datos
+
+1. **Iniciar servicios de XAMPP:**
+   - Abre el panel de control de XAMPP
+   - Inicia **Apache** y **MySQL**
+
+2. **Acceder a phpMyAdmin:**
+   - Navega a: `http://localhost/phpmyadmin`
+
+3. **Crear la base de datos:**
+   - Click en "Nueva" en el menú izquierdo
+   - O ejecuta el script SQL incluido:
+
+   ```bash
+   # Opción A: Importar desde phpMyAdmin
+   # - Click en "Importar"
+   # - Selecciona el archivo database.sql
+   # - Click en "Continuar"
+
+   # Opción B: Desde línea de comandos
+   mysql -u root -p < database.sql
+   ```
+
+4. **Verificar la creación:**
+   ```sql
+   USE ristorante;
+   SHOW TABLES;
+   -- Debe mostrar: reservas, usuarios
+   ```
+
+#### 4. Configurar Conexión a Base de Datos
+
+Edita el archivo `Models/Conexion.php`:
+
+```php
+<?php
+$host = "localhost";
+$bd = "ristorante";
+$user = "root";          // Tu usuario de MySQL
+$pass = "";              // Tu contraseña de MySQL (vacía por defecto en XAMPP)
+
+$conexion = new mysqli($host, $user, $pass, $bd);
+
+if ($conexion->connect_error) {
+    die("Connection failed: " . $conexion->connect_error);
+}
+
+$conexion->set_charset("utf8");
+```
+
+#### 5. Crear Usuario Administrador
+
+Ejecuta en phpMyAdmin o MySQL:
 
 ```sql
-CREATE DATABASE IF NOT EXISTS ristorante;
 USE ristorante;
 
+INSERT INTO usuarios (usuario, password, rol, estado)
+VALUES ('admin', 'admin123', 'administrador', 1);
+```
+
+#### 6. Verificar Instalación
+
+Accede a:
+```
+http://localhost/Proyecto-Restaurante-Italiano/api.php
+```
+
+Deberías ver una respuesta JSON con información de la API:
+```json
+{
+  "success": true,
+  "message": "API de Ristorante Italini",
+  "version": "1.0",
+  "endpoints": { ... }
+}
+```
+
+## 📡 Endpoints de la API
+
+### Base URL
+```
+http://localhost/Proyecto-Restaurante-Italiano/api.php
+```
+
+### Autenticación
+
+#### Login
+```http
+POST /api.php?controller=auth&action=autenticar
+
+Content-Type: application/x-www-form-urlencoded
+
+usuario=admin&password=admin123
+
+Response:
+{
+  "success": true,
+  "message": "Autenticación exitosa",
+  "usuario": "admin",
+  "rol": "administrador"
+}
+```
+
+#### Logout
+```http
+GET /api.php?controller=auth&action=logout
+
+Response:
+{
+  "success": true,
+  "message": "Sesión cerrada exitosamente"
+}
+```
+
+### Reservas
+
+#### Crear Reserva
+```http
+POST /api.php?accion=crear
+
+Content-Type: application/x-www-form-urlencoded
+
+nombre=Juan Pérez
+email=juan@example.com
+telefono=0991234567
+fecha=2025-03-15
+hora=19:30
+personas=4
+ocasion=cumpleaños
+comentarios=Mesa cerca de la ventana
+
+Response:
+{
+  "success": true,
+  "message": "¡Reserva creada exitosamente!",
+  "codigo": "RES-20250204-000123",
+  "id": 123
+}
+```
+
+#### Listar Todas las Reservas
+```http
+GET /api.php?accion=listar
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "codigo": "RES-20250204-000001",
+      "nombre": "Juan Pérez",
+      "email": "juan@example.com",
+      "telefono": "0991234567",
+      "fecha_hora": "15/03/2025 a las 19:30",
+      "personas": 4,
+      "ocasion": "cumpleaños",
+      "comentarios": "Mesa cerca de la ventana",
+      "estado": "pendiente"
+    }
+  ],
+  "total": 1
+}
+```
+
+#### Obtener Reserva por ID
+```http
+GET /api.php?accion=obtener&id=1
+
+Response:
+{
+  "success": true,
+  "data": { ... }
+}
+```
+
+#### Listar por Estado
+```http
+GET /api.php?accion=listar-por-estado&estado=pendiente
+
+Estados válidos: pendiente, confirmada, cancelada
+```
+
+#### Actualizar Estado
+```http
+POST /api.php?accion=actualizar-estado
+
+id=1&estado=confirmada
+
+Response:
+{
+  "success": true,
+  "message": "Estado actualizado correctamente"
+}
+```
+
+#### Actualizar Reserva Completa
+```http
+POST /api.php?accion=actualizar
+
+id=1&nombre=Juan Pérez&email=juan@example.com&...
+
+Response:
+{
+  "success": true,
+  "message": "Reserva actualizada correctamente"
+}
+```
+
+#### Eliminar Reserva
+```http
+POST /api.php?accion=eliminar
+
+id=1
+
+Response:
+{
+  "success": true,
+  "message": "Reserva eliminada correctamente"
+}
+```
+
+#### Estadísticas
+```http
+GET /api.php?accion=estadisticas
+
+Response:
+{
+  "success": true,
+  "data": {
+    "total": 10,
+    "pendientes": 5,
+    "confirmadas": 3,
+    "canceladas": 2
+  }
+}
+```
+
+## 🗄️ Esquema de Base de Datos
+
+### Tabla: reservas
+```sql
 CREATE TABLE reservas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    codigo VARCHAR(20) UNIQUE,
+    codigo VARCHAR(20) UNIQUE NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     telefono VARCHAR(20) NOT NULL,
@@ -63,164 +322,144 @@ CREATE TABLE reservas (
     ocasion VARCHAR(50),
     comentarios TEXT,
     estado ENUM('pendiente','confirmada','cancelada') DEFAULT 'pendiente',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_fecha (fecha),
+    INDEX idx_estado (estado),
+    INDEX idx_codigo (codigo)
+);
+```
+
+### Tabla: usuarios
+```sql
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    rol VARCHAR(50) NOT NULL,
+    estado TINYINT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-## Configuración
-
-1. **Verificar la conexión a la base de datos** en `Models/Conexion.php`:
-   ```php
-   $host = "localhost";
-   $bd = "ristorante";
-   $user = "root";
-   $pass = "";
-   ```
-
-2. **Iniciar XAMPP**:
-   - Apache
-   - MySQL
-
-3. **Acceder al proyecto**:
-   - Sitio principal: `http://localhost/ristorante-italini/`
-   - Panel de administración: `http://localhost/ristorante-italini/Views/admin-reservas.php`
-
-## Funcionalidades Implementadas
-
-### 1. Formulario de Reservas (index.html)
-- ✅ Validación de campos en el cliente
-- ✅ Envío mediante AJAX a PHP
-- ✅ Generación automática de código de reserva
-- ✅ Respuesta inmediata al usuario
-- ✅ Estado inicial: "pendiente"
-
-### 2. Panel de Administración (Views/admin-reservas.php)
-- ✅ Visualización de todas las reservas en tabla
-- ✅ Filtros por estado (Todas, Pendientes, Confirmadas, Canceladas)
-- ✅ Buscador por nombre, email o código
-- ✅ Cambio de estado (Confirmar/Cancelar)
-- ✅ Visualización completa de comentarios
-- ✅ Estadísticas en tiempo real
-- ✅ Diseño acorde a la temática italiana del restaurante
-
-### 3. Backend (PHP - MVC + Services)
-- ✅ **Model** (Reserva.php): Entidad con atributos y validaciones
-- ✅ **Service** (ReservaService.php): Lógica de negocio y consultas SQL
-- ✅ **Controller** (ReservaController.php): Manejo de peticiones HTTP
-- ✅ **Punto de entrada** (reservas.php): Enrutamiento de acciones
-
-## Uso
-
-### Crear una Reserva
-1. Acceder a `http://localhost/ristorante-italini/`
-2. Ir a la sección de reservas (formulario)
-3. Llenar todos los campos requeridos
-4. Hacer clic en "Confirmar Reserva"
-5. Se mostrará un código de reserva
-
-### Administrar Reservas
-1. Acceder a `http://localhost/ristorante-italini/Views/admin-reservas.php`
-2. Ver todas las reservas en la tabla
-3. Usar filtros para ver por estado
-4. Buscar reservas específicas
-5. Confirmar o cancelar reservas según sea necesario
-
-## Campos de la Tabla de Reservas
-
-| Campo | Descripción |
-|-------|-------------|
-| **Código** | Código único generado automáticamente (RES-YYYYMMDD-XXXXXX) |
-| **Nombre** | Nombre completo del cliente |
-| **Email** | Correo electrónico |
-| **Teléfono** | Número de contacto |
-| **Fecha y Hora** | Fecha y hora de la reserva concatenadas |
-| **Personas** | Cantidad de personas |
-| **Ocasión** | Tipo de ocasión (casual, cumpleaños, etc.) |
-| **Comentarios** | Comentarios especiales o alergias |
-| **Estado** | pendiente / confirmada / cancelada |
-
-## API Endpoints
-
-### Crear Reserva
+### Trigger: generar_codigo_reserva
+Genera automáticamente códigos únicos para cada reserva:
 ```
-POST /reservas.php?accion=crear
-```
-Parámetros: nombre, email, telefono, fecha, hora, personas, ocasion, comentarios
-
-### Listar Reservas
-```
-GET /reservas.php?accion=listar
+Formato: RES-YYYYMMDD-NNNNNN
+Ejemplo: RES-20250204-000123
 ```
 
-### Listar por Estado
+## 🔒 Seguridad
+
+### Implementado:
+- ✅ Validación de datos en servidor
+- ✅ Sanitización de inputs (htmlspecialchars)
+- ✅ Prepared statements (prevención SQL Injection)
+- ✅ Gestión de sesiones PHP
+- ✅ CORS configurado para frontend específico
+- ✅ Validación de tipos de datos
+
+### Recomendaciones de Producción:
+- 🔐 Implementar **password_hash()** para contraseñas
+- 🔐 Usar **JWT** o tokens de autenticación
+- 🔐 Implementar **rate limiting**
+- 🔐 Configurar **HTTPS**
+- 🔐 Validar y sanitizar **TODOS** los inputs
+- 🔐 Implementar logs de auditoría
+
+## 🧪 Pruebas
+
+### Con Postman o Thunder Client:
+
+1. **Probar creación de reserva:**
 ```
-GET /reservas.php?accion=listar-por-estado&estado=pendiente
+POST http://localhost/Proyecto-Restaurante-Italiano/api.php?accion=crear
+Body (x-www-form-urlencoded):
+  nombre: Test User
+  email: test@test.com
+  telefono: 0991234567
+  fecha: 2025-03-20
+  hora: 20:00
+  personas: 2
 ```
-Estados válidos: pendiente, confirmada, cancelada
 
-### Obtener Reserva por ID
+2. **Probar listado:**
 ```
-GET /reservas.php?accion=obtener&id=1
+GET http://localhost/Proyecto-Restaurante-Italiano/api.php?accion=listar
 ```
 
-### Actualizar Estado
+### Con cURL:
+```bash
+# Crear reserva
+curl -X POST "http://localhost/Proyecto-Restaurante-Italiano/api.php?accion=crear" \
+  -d "nombre=Test&email=test@test.com&telefono=0991234567&fecha=2025-03-20&hora=20:00&personas=2"
+
+# Listar reservas
+curl "http://localhost/Proyecto-Restaurante-Italiano/api.php?accion=listar"
 ```
-POST /reservas.php?accion=actualizar-estado
+
+## 📊 Logs y Debugging
+
+Los logs están habilitados en `api.php`:
+```php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 ```
-Parámetros: id, estado
 
-### Actualizar Reserva Completa
+**Para producción**, desactiva los errores visibles:
+```php
+error_reporting(0);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', '/path/to/error.log');
 ```
-POST /reservas.php?accion=actualizar
+
+## 🔧 Configuración de CORS
+
+El archivo `.htaccess` incluye configuración CORS:
+```apache
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+Header set Access-Control-Allow-Credentials "true"
 ```
-Parámetros: id, nombre, email, telefono, fecha, hora, personas, ocasion, comentarios
 
-### Eliminar Reserva
+Para producción, restringe el origen:
+```apache
+Header set Access-Control-Allow-Origin "https://tu-dominio.com"
 ```
-POST /reservas.php?accion=eliminar
-```
-Parámetros: id
 
-### Estadísticas
-```
-GET /reservas.php?accion=estadisticas
-```
-Retorna contadores por estado (pendiente, confirmada, cancelada, total)
+## 🐛 Solución de Problemas
 
-Ver [API-REFERENCE.md](API-REFERENCE.md) para más detalles.
+### Error: "Access denied for user"
+- Verifica credenciales en `Models/Conexion.php`
+- Asegúrate de que MySQL esté iniciado
 
-## Próximas Mejoras (Futuras)
-- Editar reserva completa
-- Eliminar reserva
-- Exportar reservas a Excel/PDF
-- Envío de emails de confirmación
-- Sistema de autenticación para administradores
-- Dashboard con gráficos
+### Error: "Table doesn't exist"
+- Ejecuta el script `database.sql`
+- Verifica el nombre de la base de datos
 
-## Notas Importantes
+### Error: 404 en endpoints
+- Verifica que `.htaccess` esté activo
+- Asegura que mod_rewrite esté habilitado en Apache
 
-1. **Rutas relativas**: Todos los archivos usan rutas relativas desde la carpeta del proyecto
-2. **Seguridad**: Los datos se sanitizan con `htmlspecialchars()`
-3. **Validación**: Doble validación (cliente y servidor)
-4. **Responsive**: El diseño se adapta a dispositivos móviles
-5. **Temática**: Los estilos mantienen la identidad visual del restaurante italiano
+### CORS Error desde frontend
+- Verifica la configuración en `.htaccess`
+- Asegura que Apache tenga mod_headers activo
 
-## Solución de Problemas
+## 📞 Información de Contacto
 
-### Las reservas no se guardan
-- Verificar que MySQL esté corriendo en XAMPP
-- Revisar la configuración de `Conexion.php`
-- Verificar que la tabla `reservas` exista en la BD
+Para soporte o consultas sobre el proyecto:
+- **Proyecto:** Ristorante Italini Backend API
+- **Curso:** MATERIA_DESARROLLO-WEB
 
-### No se muestra la tabla en admin
-- Abrir la consola del navegador (F12) para ver errores
-- Verificar que la ruta a `reservas.php` sea correcta
-- Revisar permisos de los archivos PHP
+## 📄 Licencia
 
-### Error 404 al enviar formulario
-- Verificar que el archivo `reservas.php` esté en la raíz del proyecto
-- Revisar la ruta en `app.js` (línea del fetch)
+Este proyecto es parte de un trabajo académico de **Desarrollo Web**.
+
+## 👨‍💻 Autor
+
+Desarrollado siguiendo arquitectura MVC y buenas prácticas de desarrollo PHP.
 
 ---
 
-**Desarrollado para Ristorante Italini**
+**¡Mangia bene! 🇮🇹**
